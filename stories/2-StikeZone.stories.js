@@ -1,6 +1,7 @@
 import React from "react";
 import StrikeZone from "../src/components/StrikeZone";
 import Scatter from "../src/components/Scatter";
+import Hexbin from "../src/components/Hexbin";
 
 export default {
   title: "StikeZone",
@@ -122,6 +123,7 @@ const data = [
 
 export const Strike = () => (
   <StrikeZone w={w} h={h} margin={margin} data={data}>
-    <Scatter r={10} x="x" y="y" styles={{ stroke: "blue", fill: "blue" }} />
+    <Hexbin r={10} x="x" y="y" styles={{ stroke: "blue", fill: "blue" }} />
+    <Scatter r={4} x="x" y="y" styles={{ stroke: "blue", fill: "black" }} />
   </StrikeZone>
 );
