@@ -9,7 +9,7 @@ export default {
 };
 
 const w = 500,
-  h = 260;
+  h = 500;
 
 const margin = {
   top: 40,

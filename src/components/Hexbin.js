@@ -1,6 +1,6 @@
 import React from "react";
-import { extent, mean, max } from "d3-array";
 import { hexbin } from "d3-hexbin";
+import PropTypes from "prop-types";
 
 function Hexbin({
   r,
@@ -43,5 +43,17 @@ function Hexbin({
     </g>
   ));
 }
+
+Hexbin.propTypes = {
+  r: PropTypes.number,
+  x: PropTypes.string.isRequired,
+  y: PropTypes.string.isRequired,
+  data: PropTypes.arrayOf(PropTypes.object),
+  xScale: PropTypes.func,
+  yScale: PropTypes.func,
+  margin: PropTypes.object,
+  width: PropTypes.number,
+  height: PropTypes.number,
+};
 
 export default Hexbin;
