@@ -1,5 +1,4 @@
 import React from "react";
-import StrikeZoneBox from "./StrikeZoneBox";
 import { scaleLinear } from "d3-scale";
 import { extent } from "d3-array";
 import PropTypes from "prop-types";
@@ -46,10 +45,7 @@ function StrikeZone({ w = 500, h = 500, margin, data, children }) {
 
   return (
     <svg width={w} height={h}>
-      <g transform={`translate(${margin.left},${margin.top})`}>
-        {newChildren}
-        <StrikeZoneBox xScale={xScale} yScale={yScale} />
-      </g>
+      <g transform={`translate(${margin.left},${margin.top})`}>{newChildren}</g>
     </svg>
   );
 }
