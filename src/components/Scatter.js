@@ -7,7 +7,7 @@ import Circles from "./primitives/Circles";
 import { colorScale } from "./utils/scales";
 
 function Scatter({ r, x, y, styles, data, xScale, yScale, fill = {} }) {
-  const { tooltip, setTooltip } = useContext(TooltipContext);
+  const { setTooltip } = useContext(TooltipContext) || {};
 
   const { fillValue, type, domain, colorRange } = fill;
 
@@ -21,17 +21,22 @@ function Scatter({ r, x, y, styles, data, xScale, yScale, fill = {} }) {
     }
   }
 
-  function handleMouseOver(e) {
-    setTooltip({
-      display: true,
-      info: "HELLO WORLD",
-      x: e.target.cx.animVal.value + 100,
-      y: e.target.cy.animVal.value,
-    });
+  function handleMouseOver(e, d) {
+    if (setTooltip) {
+      setTooltip({
+        display: true,
+        data: d,
+        info: "HELLO WORLD",
+        x: e.target.cx.animVal.value + 100,
+        y: e.target.cy.animVal.value,
+      });
+    }
   }
 
   function handleMouseOut() {
-    setTooltip({ display: false });
+    if (setTooltip) {
+      setTooltip({ display: false });
+    }
   }
 
   const circles = data.map((d, i) => (
@@ -41,7 +46,7 @@ function Scatter({ r, x, y, styles, data, xScale, yScale, fill = {} }) {
       cx={xScale(d[x])}
       cy={yScale(d[y])}
       style={{ fill: displayColor(color, d[fillValue]), ...styles }}
-      onMouseOver={(e) => handleMouseOver(e)}
+      onMouseOver={(e) => handleMouseOver(e, d)}
       onMouseOut={handleMouseOut}
     />
   ));

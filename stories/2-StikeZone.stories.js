@@ -223,7 +223,12 @@ export const TooltipCircle = () => (
         />
         <StrikeZoneBox />
       </StrikeZone>
-      <Tooltip />
+      <Tooltip
+        labels={({ pitch, value }) =>
+          `the pitch was ${pitch} and value was ${value.toFixed(2)}`
+        }
+        styles={{ border: "3px solid purple" }}
+      />
     </BaseballChartsContainer>
   </>
 );

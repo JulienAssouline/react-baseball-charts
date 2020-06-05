@@ -1,10 +1,12 @@
 import React, { useContext } from "react";
 import { TooltipContext } from "../context/TooltipContext";
 
-function Tooltip() {
+function Tooltip({ labels, styles }) {
   const { tooltip } = useContext(TooltipContext);
 
   if (!tooltip.display) return <></>;
+
+  const { info, x, y, data } = tooltip;
 
   return (
     <div
@@ -17,11 +19,14 @@ function Tooltip() {
         padding: 10,
         width: 300,
         textAlign: "left",
-        left: tooltip.x,
-        top: tooltip.y,
+        backgroundColor: "white",
+        left: x,
+        top: y,
+        ...styles,
       }}
     >
-      <h1>{tooltip.info}</h1>
+      <h3>{info}</h3>
+      <p>{labels(data)}</p>
     </div>
   );
 }
