@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 
+import { TooltipContext } from "../context/TooltipContext";
 import Circles from "./primitives/Circles";
 
 import { colorScale } from "./utils/scales";
 
 function Scatter({ r, x, y, styles, data, xScale, yScale, fill = {} }) {
+  const { tooltip, setTooltip } = useContext(TooltipContext);
+
   const { fillValue, type, domain, colorRange } = fill;
 
   const color = colorScale(type, domain, colorRange);
@@ -18,6 +21,19 @@ function Scatter({ r, x, y, styles, data, xScale, yScale, fill = {} }) {
     }
   }
 
+  function handleMouseOver(e) {
+    setTooltip({
+      display: true,
+      info: "HELLO WORLD",
+      x: e.target.cx.animVal.value + 100,
+      y: e.target.cy.animVal.value,
+    });
+  }
+
+  function handleMouseOut() {
+    setTooltip({ display: false });
+  }
+
   const circles = data.map((d, i) => (
     <Circles
       key={i}
@@ -25,6 +41,8 @@ function Scatter({ r, x, y, styles, data, xScale, yScale, fill = {} }) {
       cx={xScale(d[x])}
       cy={yScale(d[y])}
       style={{ fill: displayColor(color, d[fillValue]), ...styles }}
+      onMouseOver={(e) => handleMouseOver(e)}
+      onMouseOut={handleMouseOut}
     />
   ));
 

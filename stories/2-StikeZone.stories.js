@@ -4,6 +4,8 @@ import Scatter from "../src/components/Scatter";
 import Hexbin from "../src/components/Hexbin";
 import { extent } from "d3-array";
 import StrikeZoneBox from "../src/components/StrikeZoneBox";
+import Tooltip from "../src/components/Tooltip";
+import BaseballChartsContainer from "../src/components/BaseballChartsContainer";
 
 export default {
   title: "StikeZone",
@@ -137,19 +139,6 @@ const rangeValue = extent(data, (d) => d.value);
 
 export const Circles = () => (
   <StrikeZone w={w} h={h} margin={margin} data={data}>
-    {/* <Hexbin
-      r={10}
-      x="x"
-      y="y"
-      aggregator="mean"
-      fill={{
-        type: "seqential",
-        minMax: [rangeValue[0], rangeValue[1]],
-        fillValue: "value",
-        colorRange: ["white", "#003da5"],
-      }}
-      styles={{ stroke: "blue" }}
-    /> */}
     <Scatter
       r={6}
       x="x"
@@ -214,4 +203,27 @@ export const HexCircles = () => (
     />
     <StrikeZoneBox />
   </StrikeZone>
+);
+
+export const TooltipCircle = () => (
+  <>
+    <BaseballChartsContainer>
+      <StrikeZone w={w} h={h} margin={margin} data={data}>
+        <Scatter
+          r={6}
+          x="x"
+          y="y"
+          fill={{
+            type: "ordinal",
+            domain: ["FB", "SL", "CU"],
+            fillValue: "pitch",
+            colorRange: ["red", "blue", "green"],
+          }}
+          styles={{ stroke: "none" }}
+        />
+        <StrikeZoneBox />
+      </StrikeZone>
+      <Tooltip />
+    </BaseballChartsContainer>
+  </>
 );
