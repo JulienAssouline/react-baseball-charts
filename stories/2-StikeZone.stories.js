@@ -6,6 +6,7 @@ import { extent } from "d3-array";
 import StrikeZoneBox from "../src/components/StrikeZoneBox";
 import Tooltip from "../src/components/Tooltip";
 import BaseballChartsContainer from "../src/components/BaseballChartsContainer";
+import { TextLegend } from "../src/components/Legends";
 
 export default {
   title: "StikeZone",
@@ -278,4 +279,25 @@ export const TooltipHex = () => (
       <Tooltip labels={({ value }) => <p>{`${value.toFixed(2)}`}</p>} />
     </BaseballChartsContainer>
   </>
+);
+
+export const LegendCircles = () => (
+  <BaseballChartsContainer>
+    <StrikeZone w={w} h={h} margin={margin} data={data}>
+      <Scatter
+        r={6}
+        x="x"
+        y="y"
+        fill={{
+          type: "ordinal",
+          domain: ["FB", "SL", "CU"],
+          fillValue: "pitch",
+          colorRange: ["red", "blue", "green"],
+        }}
+        styles={{ stroke: "none" }}
+      />
+      <StrikeZoneBox />
+    </StrikeZone>
+    <TextLegend uniqueText={["FB", "SL", "CU"]} />
+  </BaseballChartsContainer>
 );

@@ -5,7 +5,6 @@ const TooltipContext = createContext();
 const TooltipProvider = ({ children }) => {
   const [tooltip, setTooltip] = useState({
     display: false,
-    info: null,
     x: null,
     y: null,
   });
