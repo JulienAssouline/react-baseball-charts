@@ -26,8 +26,7 @@ function Scatter({ r, x, y, styles, data, xScale, yScale, fill = {} }) {
       setTooltip({
         display: true,
         data: d,
-        info: "HELLO WORLD",
-        x: e.target.cx.animVal.value + 100,
+        x: e.target.cx.animVal.value,
         y: e.target.cy.animVal.value,
       });
     }

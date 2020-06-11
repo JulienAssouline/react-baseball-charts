@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { hexbin } from "d3-hexbin";
-import { max, mean, median } from "d3-array";
+import { max, mean, median, sum, min } from "d3-array";
 import PropTypes from "prop-types";
 
+import { TooltipContext } from "../context/TooltipContext";
 import Path from "./primitives/Path";
 
 import { colorScale } from "./utils/scales";
@@ -20,8 +21,11 @@ function Hexbin({
   height,
   fill = {},
   aggregator,
+  aggregateValue,
 }) {
-  const { fillValue, type, minMax, colorRange } = fill;
+  const { setTooltip } = useContext(TooltipContext) || {};
+
+  const { type, minMax, colorRange } = fill;
 
   const hexbinData = hexbin()
     .x((d) => xScale(d[x]))
@@ -32,10 +36,13 @@ function Hexbin({
       [width - margin.right, height - margin.bottom],
     ]);
 
-  function binData(data, fillValue, aggregator) {
+  function binData(data, aggregateValue, aggregator) {
     function aggregatorFun(check, d) {
-      if (check === "mean") return mean(d, (v) => v[fillValue]);
-      if (check === "median") return median(d, (v) => v[fillValue]);
+      if (check === "mean") return mean(d, (v) => v[aggregateValue]);
+      if (check === "median") return median(d, (v) => v[aggregateValue]);
+      if (check === "max") return max(d, (v) => v[aggregateValue]);
+      if (check === "min") return min(d, (v) => v[aggregateValue]);
+      if (check === "sum") return sum(d, (v) => v[aggregateValue]);
     }
 
     const bins = Object.assign(
@@ -43,7 +50,7 @@ function Hexbin({
         return {
           x: d.x,
           y: d.y,
-          value: aggregatorFun(aggregator, d),
+          [aggregateValue]: aggregatorFun(aggregator, d),
           count: d.length,
         };
       })
@@ -52,9 +59,26 @@ function Hexbin({
     return bins;
   }
 
-  const bins = binData(data, fillValue, aggregator);
+  const bins = binData(data, aggregateValue, aggregator);
 
   const color = colorScale(type, minMax, colorRange);
+
+  function handleMouseOver(e, d) {
+    if (setTooltip) {
+      setTooltip({
+        display: true,
+        data: d,
+        x: d.x,
+        y: d.y,
+      });
+    }
+  }
+
+  function handleMouseOut() {
+    if (setTooltip) {
+      setTooltip({ display: false });
+    }
+  }
 
   return bins.map((d, i) => (
     <g key={i} style={{ stroke: "#000", strokeOpacity: 0.1 }}>
@@ -62,9 +86,11 @@ function Hexbin({
         d={hexbinData.hexagon()}
         transform={`translate(${d.x},${d.y})`}
         style={{
-          fill: color ? color(d[fillValue]) : null,
+          fill: color ? color(d[aggregateValue]) : null,
           ...styles,
         }}
+        onMouseOver={(e) => handleMouseOver(e, d)}
+        onMouseOut={handleMouseOut}
       />
     </g>
   ));

@@ -162,10 +162,10 @@ export const Hex = () => (
       x="x"
       y="y"
       aggregator="mean"
+      aggregateValue="value"
       fill={{
         type: "seqential",
         minMax: [rangeValue[0], rangeValue[1]],
-        fillValue: "value",
         colorRange: ["white", "#003da5"],
       }}
       styles={{ stroke: "blue" }}
@@ -181,10 +181,10 @@ export const HexCircles = () => (
       x="x"
       y="y"
       aggregator="mean"
+      aggregateValue="value"
       fill={{
         type: "seqential",
         minMax: [rangeValue[0], rangeValue[1]],
-        fillValue: "value",
         colorRange: ["white", "#003da5"],
       }}
       styles={{ stroke: "blue" }}
@@ -224,11 +224,58 @@ export const TooltipCircle = () => (
         <StrikeZoneBox />
       </StrikeZone>
       <Tooltip
-        labels={({ pitch, value }) =>
-          `the pitch was ${pitch} and value was ${value.toFixed(2)}`
-        }
-        styles={{ border: "3px solid purple" }}
+        labels={({ pitch, value }) => (
+          <div style={{ display: "flex", padding: 10 }}>
+            <div style={{ display: "flex", padding: 10 }}>
+              <div
+                style={{
+                  width: 10,
+                  height: 10,
+                  backgroundColor: "blue",
+                  borderRadius: 25,
+                }}
+              ></div>
+              <div
+                style={{
+                  width: 10,
+                  height: 10,
+                  backgroundColor: "blue",
+                  borderRadius: 25,
+                }}
+              ></div>
+            </div>
+            <div style={{ padding: 10 }}>
+              <p>{`the pitch was ${pitch} and value was ${value.toFixed(
+                2
+              )}`}</p>
+            </div>
+          </div>
+        )}
       />
+    </BaseballChartsContainer>
+  </>
+);
+
+export const TooltipHex = () => (
+  <>
+    <BaseballChartsContainer>
+      <StrikeZone w={w} h={h} margin={margin} data={data}>
+        <Hexbin
+          r={10}
+          x="x"
+          y="y"
+          aggregator="min"
+          aggregateValue="value"
+          fill={{
+            type: "seqential",
+            minMax: [rangeValue[0], rangeValue[1]],
+            colorRange: ["white", "#003da5"],
+          }}
+          styles={{ stroke: "blue" }}
+        />
+        <StrikeZoneBox />
+      </StrikeZone>
+      <Tooltip labels={({ value }) => <p>{`${value.toFixed(2)}`}</p>} />
     </BaseballChartsContainer>
   </>
 );
