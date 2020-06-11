@@ -7,6 +7,7 @@ import { TooltipContext } from "../context/TooltipContext";
 import Path from "./primitives/Path";
 
 import { colorScale } from "./utils/scales";
+import { handleMouseOut, handleMouseOver } from "./utils/mouseEvents";
 
 function Hexbin({
   r,
@@ -63,23 +64,6 @@ function Hexbin({
 
   const color = colorScale(type, minMax, colorRange);
 
-  function handleMouseOver(e, d) {
-    if (setTooltip) {
-      setTooltip({
-        display: true,
-        data: d,
-        x: d.x,
-        y: d.y,
-      });
-    }
-  }
-
-  function handleMouseOut() {
-    if (setTooltip) {
-      setTooltip({ display: false });
-    }
-  }
-
   return bins.map((d, i) => (
     <g key={i} style={{ stroke: "#000", strokeOpacity: 0.1 }}>
       <Path
@@ -89,8 +73,8 @@ function Hexbin({
           fill: color ? color(d[aggregateValue]) : null,
           ...styles,
         }}
-        onMouseOver={(e) => handleMouseOver(e, d)}
-        onMouseOut={handleMouseOut}
+        onMouseOver={(e) => handleMouseOver(e, d, d.x, d.y, setTooltip)}
+        onMouseOut={() => handleMouseOut(setTooltip)}
       />
     </g>
   ));
