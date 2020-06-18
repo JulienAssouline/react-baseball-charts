@@ -282,7 +282,13 @@ export const TooltipHex = () => (
 );
 
 export const LegendCircles = () => (
-  <BaseballChartsContainer>
+  <BaseballChartsContainer width={500}>
+    <TextLegend
+      colors={["red", "blue", "green"]}
+      uniqueText={["FB", "SL", "CU"]}
+      position="center"
+      orient="row"
+    />
     <StrikeZone w={w} h={h} margin={margin} data={data}>
       <Scatter
         r={6}
@@ -298,6 +304,5 @@ export const LegendCircles = () => (
       />
       <StrikeZoneBox />
     </StrikeZone>
-    <TextLegend uniqueText={["FB", "SL", "CU"]} />
   </BaseballChartsContainer>
 );

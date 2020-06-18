@@ -1,10 +1,14 @@
 import React from "react";
 import { TooltipProvider } from "../context/TooltipContext";
 
-function BaseballChartsContainer({ children }) {
+function BaseballChartsContainer({ width, styles, children }) {
   return (
     <TooltipProvider>
-      <div>{children}</div>
+      <div style={{ styles }}>
+        {React.Children.map(children, (child) => {
+          return React.cloneElement(child, { width });
+        })}
+      </div>
     </TooltipProvider>
   );
 }

@@ -1,10 +1,31 @@
 import React from "react";
+import { colorScale } from "../components/utils/scales";
+function TextLegend({ position, orient, uniqueText, colors, styles, width }) {
+  const color = colorScale("ordinal", uniqueText, colors);
 
-function TextLegend({ uniqueText, colorScale, styles }) {
+  let newPos = position;
+  if (position === "right") {
+    newPos = "flex-end";
+  }
+  if (position === "left") {
+    newPos = "flex-start";
+  }
+
+  const alignMent = orient === "column" ? "alignItems" : "justifyContent";
+
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        flexFlow: orient,
+        [alignMent]: newPos,
+        width,
+      }}
+    >
       {uniqueText.map((d, i) => (
-        <div key={i}>{d}</div>
+        <div style={{ color: color(d), padding: 5, ...styles }} key={i}>
+          {d}
+        </div>
       ))}
     </div>
   );
