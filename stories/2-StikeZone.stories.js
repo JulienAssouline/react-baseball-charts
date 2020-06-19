@@ -363,10 +363,9 @@ export const LegendLinear = () => (
       }}
       x={-10}
       y={-20}
-      height={20}
-      width={300}
-      fontSize={20}
-      shapeWidth={20}
+      fontSize={14}
+      shapeWidth={30}
+      padding={20}
     />
     <StrikeZoneBox />
   </StrikeZone>
