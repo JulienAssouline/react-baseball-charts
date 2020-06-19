@@ -6,7 +6,7 @@ import { extent } from "d3-array";
 import StrikeZoneBox from "../src/components/StrikeZoneBox";
 import Tooltip from "../src/components/Tooltip";
 import BaseballChartsContainer from "../src/components/BaseballChartsContainer";
-import { TextLegend } from "../src/components/Legends";
+import { TextLegend, CircleLegend } from "../src/components/Legends";
 
 export default {
   title: "StikeZone",
@@ -281,13 +281,42 @@ export const TooltipHex = () => (
   </>
 );
 
-export const LegendCircles = () => (
+export const LegendText = () => (
   <BaseballChartsContainer width={500}>
     <TextLegend
       colors={["red", "blue", "green"]}
       uniqueText={["FB", "SL", "CU"]}
       position="center"
-      orient="row"
+      orient="horizontal"
+    />
+    <StrikeZone w={w} h={h} margin={margin} data={data}>
+      <Scatter
+        r={6}
+        x="x"
+        y="y"
+        fill={{
+          type: "ordinal",
+          domain: ["FB", "SL", "CU"],
+          fillValue: "pitch",
+          colorRange: ["red", "blue", "green"],
+        }}
+        styles={{ stroke: "none" }}
+      />
+      <StrikeZoneBox />
+    </StrikeZone>
+  </BaseballChartsContainer>
+);
+
+export const LegendCircle = () => (
+  <BaseballChartsContainer width={500}>
+    <CircleLegend
+      colors={["red", "blue", "green"]}
+      uniqueText={["FB", "SL", "CU"]}
+      position="center"
+      orient="horizontal"
+      radius={25}
+      size={{ width: 10, height: 10 }}
+      styles={{ padding: 5 }}
     />
     <StrikeZone w={w} h={h} margin={margin} data={data}>
       <Scatter
