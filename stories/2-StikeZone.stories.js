@@ -6,7 +6,11 @@ import { extent } from "d3-array";
 import StrikeZoneBox from "../src/components/StrikeZoneBox";
 import Tooltip from "../src/components/Tooltip";
 import BaseballChartsContainer from "../src/components/BaseballChartsContainer";
-import { TextLegend, CircleLegend } from "../src/components/Legends";
+import {
+  TextLegend,
+  CircleLegend,
+  LinearLegend,
+} from "../src/components/Legends";
 
 export default {
   title: "StikeZone",
@@ -334,4 +338,36 @@ export const LegendCircle = () => (
       <StrikeZoneBox />
     </StrikeZone>
   </BaseballChartsContainer>
+);
+
+export const LegendLinear = () => (
+  <StrikeZone w={w} h={h} margin={margin} data={data}>
+    <Hexbin
+      r={10}
+      x="x"
+      y="y"
+      aggregator="min"
+      aggregateValue="value"
+      fill={{
+        type: "seqential",
+        minMax: [rangeValue[0], rangeValue[1]],
+        colorRange: ["white", "#003da5"],
+      }}
+      styles={{ stroke: "blue" }}
+    />
+    <LinearLegend
+      scale={{
+        type: "seqential",
+        minMax: [Math.round(rangeValue[0]), Math.round(rangeValue[1])],
+        colorRange: ["rgb(230, 236, 246)", "#003da5"],
+      }}
+      x={-10}
+      y={-20}
+      height={20}
+      width={300}
+      fontSize={20}
+      shapeWidth={20}
+    />
+    <StrikeZoneBox />
+  </StrikeZone>
 );
