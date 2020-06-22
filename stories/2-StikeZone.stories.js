@@ -366,6 +366,7 @@ export const LegendLinear = () => (
       fontSize={14}
       shapeWidth={30}
       padding={20}
+      orient="vertical"
     />
     <StrikeZoneBox />
   </StrikeZone>

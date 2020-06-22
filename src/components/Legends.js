@@ -111,14 +111,21 @@ function LinearLegend({
   shapeWidth = 20,
   padding = 40,
   shapeHeight = 20,
+  orient = "horizontal",
 }) {
   const { type, minMax, colorRange } = scale;
 
   const color = colorScale(type, minMax, colorRange);
 
-  const linear = scaleLinear()
-    .domain(minMax)
-    .range([0, shapeWidth * 10 + padding]);
+  function scaleRange(orientation) {
+    if (orientation === "horizontal") {
+      return [0, shapeWidth * 10 + padding];
+    } else if (orientation === "vertical") {
+      return [shapeHeight * 10 + padding, 0];
+    } else return null;
+  }
+
+  const linear = scaleLinear().domain(minMax).range(scaleRange(orient));
 
   return (
     <>
@@ -126,8 +133,8 @@ function LinearLegend({
         {linear.ticks().map((d, i) => (
           <g key={i}>
             <rect
-              x={linear(d)}
-              y={shapeHeight}
+              x={orient === "horizontal" ? linear(d) : shapeWidth}
+              y={orient === "horizontal" ? shapeHeight : linear(d)}
               height={shapeHeight}
               width={shapeWidth}
               fill={color(d)}
@@ -137,8 +144,8 @@ function LinearLegend({
               dominantBaseline="middle"
               dy={".80em"}
               dx={shapeWidth / 2}
-              x={linear(d)}
-              y={shapeHeight * 2}
+              x={orient === "horizontal" ? linear(d) : shapeWidth * 2}
+              y={orient === "horizontal" ? shapeHeight * 2 : linear(d)}
               style={{ fontSize: fontSize }}
             >
               {d}
