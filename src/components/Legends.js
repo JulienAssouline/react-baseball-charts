@@ -122,7 +122,10 @@ function LinearLegend({
       return [0, shapeWidth * 10 + padding];
     } else if (orientation === "vertical") {
       return [shapeHeight * 10 + padding, 0];
-    } else return null;
+    } else
+      throw new Error(
+        `horizontal and vertical are the only valid orient values`
+      );
   }
 
   const linear = scaleLinear().domain(minMax).range(scaleRange(orient));

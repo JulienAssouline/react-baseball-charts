@@ -361,12 +361,12 @@ export const LegendLinear = () => (
         minMax: [Math.round(rangeValue[0]), Math.round(rangeValue[1])],
         colorRange: ["rgb(230, 236, 246)", "#003da5"],
       }}
-      x={-10}
-      y={-20}
+      x={0}
+      y={-40}
       fontSize={14}
       shapeWidth={30}
       padding={20}
-      orient="vertical"
+      orient="horizontal"
     />
     <StrikeZoneBox />
   </StrikeZone>

@@ -44,7 +44,7 @@ function StrikeZone({ w = 500, h = 500, margin, data, children }) {
       });
 
   return (
-    <svg width={w} height={h}>
+    <svg data-testid="strike-zone" width={w} height={h}>
       <g transform={`translate(${margin.left},${margin.top})`}>{newChildren}</g>
     </svg>
   );

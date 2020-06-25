@@ -9,6 +9,7 @@ export default function StrikeZoneBox({ xScale, yScale }) {
   };
   return (
     <path
+      data-testid="zone"
       d={`M${xScale(strikeZoneCoords.left)}, ${yScale(
         strikeZoneCoords.top
       )} L ${xScale(strikeZoneCoords.right)}, ${yScale(
