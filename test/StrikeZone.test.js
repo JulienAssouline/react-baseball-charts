@@ -1,7 +1,8 @@
 import { render } from "@testing-library/react";
 import React from "react";
-import StrikeZone from "./StrikeZone";
-import StrikeZoneBox from "./StrikeZoneBox";
+import StrikeZone from "../src/components/StrikeZone";
+import StrikeZoneBox from "../src/components/StrikeZoneBox";
+import Scatter from "../src/components/Scatter";
 
 describe("StrikeZone Scatter", () => {
   const w = 500,
@@ -40,9 +41,18 @@ describe("StrikeZone Scatter", () => {
       </StrikeZone>
     );
 
-    console.log(getByTestId("strike-zone").length);
-
     expect(getByTestId("strike-zone"));
     expect(getByTestId("zone"));
+  });
+
+  test("should have 16 circles", () => {
+    const { getAllByTestId } = render(
+      <StrikeZone w={w} h={h} margin={margin} data={data}>
+        <Scatter x="x" y="y" />
+        <StrikeZoneBox />
+      </StrikeZone>
+    );
+
+    expect(getAllByTestId("scatter-circles"));
   });
 });

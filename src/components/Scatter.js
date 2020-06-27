@@ -24,6 +24,7 @@ function Scatter({ r, x, y, styles, data, xScale, yScale, fill = {} }) {
 
   const circles = data.map((d, i) => (
     <Circles
+      data-testid="scatter-circles"
       key={i}
       r={r}
       cx={xScale(d[x])}
