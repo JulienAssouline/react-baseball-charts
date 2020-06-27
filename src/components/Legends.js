@@ -1,9 +1,10 @@
 import React from "react";
 import { colorScale } from "./utils/scales";
 import { scaleLinear } from "d3-scale";
+import PropTypes from "prop-types";
 
-function TextLegend({ position, orient, uniqueText, colors, styles, width }) {
-  const color = colorScale("ordinal", uniqueText, colors);
+function TextLegend({ position, orient, text, colors, styles, width }) {
+  const color = colorScale("ordinal", text, colors);
 
   let newPos = position;
   if (position === "right") {
@@ -33,7 +34,7 @@ function TextLegend({ position, orient, uniqueText, colors, styles, width }) {
         width,
       }}
     >
-      {uniqueText.map((d, i) => (
+      {text.map((d, i) => (
         <div style={{ color: color(d), padding: 5, ...styles }} key={i}>
           {d}
         </div>
@@ -42,17 +43,26 @@ function TextLegend({ position, orient, uniqueText, colors, styles, width }) {
   );
 }
 
+TextLegend.propTypes = {
+  position: PropTypes.string,
+  orient: PropTypes.string,
+  text: PropTypes.arrayOf(PropTypes.string),
+  colors: PropTypes.arrayOf(PropTypes.string),
+  styles: PropTypes.object,
+  width: PropTypes.number,
+};
+
 function CircleLegend({
   position,
   orient,
-  uniqueText,
+  text,
   colors,
   styles,
   width,
   size,
   radius,
 }) {
-  const color = colorScale("ordinal", uniqueText, colors);
+  const color = colorScale("ordinal", text, colors);
 
   let newPos = position;
   if (position === "right") {
@@ -82,7 +92,7 @@ function CircleLegend({
         width,
       }}
     >
-      {uniqueText.map((d, i) => (
+      {text.map((d, i) => (
         <div
           style={{ display: "flex", alignItems: "center", ...styles }}
           key={i}
@@ -101,6 +111,17 @@ function CircleLegend({
     </div>
   );
 }
+
+CircleLegend.propTypes = {
+  position: PropTypes.string,
+  orient: PropTypes.string,
+  text: PropTypes.arrayOf(PropTypes.string),
+  colors: PropTypes.arrayOf(PropTypes.string),
+  styles: PropTypes.object,
+  width: PropTypes.number,
+  size: PropTypes.object,
+  radius: PropTypes.number,
+};
 
 function LinearLegend({
   x,
@@ -159,5 +180,17 @@ function LinearLegend({
     </>
   );
 }
+
+LinearLegend.propTypes = {
+  x: PropTypes.number,
+  y: PropTypes.number,
+  scale: PropTypes.object,
+  fontSize: PropTypes.number,
+  styles: PropTypes.object,
+  shapeWidth: PropTypes.number,
+  padding: PropTypes.number,
+  shapeHeight: PropTypes.number,
+  orient: PropTypes.string,
+};
 
 export { TextLegend, CircleLegend, LinearLegend };

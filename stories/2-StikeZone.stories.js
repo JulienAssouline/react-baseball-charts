@@ -289,7 +289,7 @@ export const LegendText = () => (
   <BaseballChartsContainer width={500}>
     <TextLegend
       colors={["red", "blue", "green"]}
-      uniqueText={["FB", "SL", "CU"]}
+      text={["FB", "SL", "CU"]}
       position="center"
       orient="horizontal"
     />
@@ -315,7 +315,7 @@ export const LegendCircle = () => (
   <BaseballChartsContainer width={500}>
     <CircleLegend
       colors={["red", "blue", "green"]}
-      uniqueText={["FB", "SL", "CU"]}
+      text={["FB", "SL", "CU"]}
       position="center"
       orient="horizontal"
       radius={25}
