@@ -1,7 +1,9 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
 # dependencies
+.DS_Store
 node_modules
+package-lock.json
 coverage
 
 # builds
@@ -12,7 +14,6 @@ dist
 # misc
 .DS_Store
 .env
-package-lock.json
 
 
 npm-debug.log*
