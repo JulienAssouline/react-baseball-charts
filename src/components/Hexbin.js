@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import { hexbin } from "d3-hexbin";
-import { max, mean, median, sum, min } from "d3-array";
 import PropTypes from "prop-types";
 
 import { TooltipContext } from "../context/TooltipContext";
 import Path from "./primitives/Path";
 
+import { binData, aggregatorFun } from "./utils/aggregators";
 import { colorScale } from "./utils/scales";
 import { handleMouseOut, handleMouseOver } from "./utils/mouseEvents";
 
@@ -37,30 +37,13 @@ function Hexbin({
       [width - margin.right, height - margin.bottom],
     ]);
 
-  function binData(data, aggregateValue, aggregator) {
-    function aggregatorFun(check, d) {
-      if (check === "mean") return mean(d, (v) => v[aggregateValue]);
-      if (check === "median") return median(d, (v) => v[aggregateValue]);
-      if (check === "max") return max(d, (v) => v[aggregateValue]);
-      if (check === "min") return min(d, (v) => v[aggregateValue]);
-      if (check === "sum") return sum(d, (v) => v[aggregateValue]);
-    }
-
-    const bins = Object.assign(
-      hexbinData(data).map((d) => {
-        return {
-          x: d.x,
-          y: d.y,
-          [aggregateValue]: aggregatorFun(aggregator, d),
-          count: d.length,
-        };
-      })
-    );
-
-    return bins;
-  }
-
-  const bins = binData(data, aggregateValue, aggregator);
+  const bins = binData(
+    hexbinData,
+    data,
+    aggregateValue,
+    aggregatorFun,
+    aggregator
+  );
 
   const color = colorScale(type, minMax, colorRange);
 

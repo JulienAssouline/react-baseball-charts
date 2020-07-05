@@ -7,6 +7,7 @@ import { extent } from "d3-array";
 import Tooltip from "../src/components/Tooltip";
 import BaseballChartsContainer from "../src/components/BaseballChartsContainer";
 import { colorScale } from "../src/components/utils/scales";
+import { aggregatorFun } from "../src/components/utils/aggregators";
 
 afterEach(cleanup);
 
@@ -41,23 +42,9 @@ describe("StrikeZone Scatter", () => {
   ];
 
   test("should have multiple hexbins", () => {
-    const rangeValue = extent(data, (d) => d.value);
-
     const { getAllByTestId } = render(
       <StrikeZone w={w} h={h} margin={margin} data={data}>
-        <Hexbin
-          r={10}
-          x="x"
-          y="y"
-          aggregator="mean"
-          aggregateValue="value"
-          fill={{
-            type: "seqential",
-            minMax: [rangeValue[0], rangeValue[1]],
-            colorRange: ["white", "#003da5"],
-          }}
-          styles={{ stroke: "blue" }}
-        />
+        <Hexbin r={10} x="x" y="y" aggregator="mean" aggregateValue="value" />
         <StrikeZoneBox />
       </StrikeZone>
     );
@@ -97,7 +84,7 @@ describe("StrikeZone Scatter", () => {
     expect(container.querySelector("p")).not.toBeNull();
   });
 
-  test("removes the tooltip on mouseOver", () => {
+  test("removes the tooltip on mouseOut", () => {
     const rangeValue = extent(data, (d) => d.value);
 
     const { container, getAllByTestId } = render(
@@ -151,5 +138,29 @@ describe("StrikeZone Scatter", () => {
 
     expect(scale(rangeValue[0])).toBe("rgb(255, 255, 255)");
     expect(scale(rangeValue[1])).toBe("rgb(0, 61, 165)");
+  });
+
+  test("test aggregators", () => {
+    const aggrData = [
+      { x: 0.0162, y: 3.9406, value: 1, pitch: "FB" },
+      { x: 0.0162, y: 3.9406, value: 2, pitch: "FB" },
+      { x: 0.0162, y: 3.9406, value: 3, pitch: "FB" },
+      { x: 0.0162, y: 3.9406, value: 4, pitch: "FB" },
+      { x: 0.0162, y: 3.9406, value: 5, pitch: "FB" },
+      { x: 0.0162, y: 3.9406, value: 6, pitch: "FB" },
+      { x: 0.0162, y: 3.9406, value: 7, pitch: "FB" },
+    ];
+
+    const mean = aggregatorFun("mean", aggrData, "value");
+    const median = aggregatorFun("median", aggrData, "value");
+    const max = aggregatorFun("max", aggrData, "value");
+    const min = aggregatorFun("min", aggrData, "value");
+    const sum = aggregatorFun("sum", aggrData, "value");
+
+    expect(mean).toBe(4);
+    expect(median).toBe(4);
+    expect(max).toBe(7);
+    expect(min).toBe(1);
+    expect(sum).toBe(28);
   });
 });

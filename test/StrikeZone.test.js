@@ -41,7 +41,7 @@ describe("StrikeZone Scatter", () => {
 
   test("should display zone", () => {
     const { getByTestId } = render(
-      <StrikeZone w={w} h={h} margin={margin} data={data}>
+      <StrikeZone margin={margin} data={data}>
         <StrikeZoneBox />
       </StrikeZone>
     );
@@ -102,7 +102,7 @@ describe("StrikeZone Scatter", () => {
     expect(container.querySelector("p")).not.toBeNull();
   });
 
-  test("removes the tooltip on mouseOver", () => {
+  test("removes the tooltip on mouseOut", () => {
     const { container, getAllByTestId } = render(
       <BaseballChartsContainer>
         <StrikeZone w={w} h={h} margin={margin} data={data}>
