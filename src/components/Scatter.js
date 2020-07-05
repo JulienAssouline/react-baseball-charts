@@ -34,8 +34,8 @@ function Scatter({ r, x, y, styles, data, xScale, yScale, fill = {} }) {
         handleMouseOver(
           e,
           d,
-          e.target.cx.animVal.value,
-          e.target.cy.animVal.value,
+          e.target.cx?.animVal.value,
+          e.target.cy?.animVal.value,
           setTooltip
         )
       }

@@ -1,11 +1,12 @@
-import { render, cleanup, fireEvent } from "@testing-library/react";
+import { render, fireEvent, cleanup } from "@testing-library/react";
 import React from "react";
 import StrikeZone from "../src/components/StrikeZone";
 import StrikeZoneBox from "../src/components/StrikeZoneBox";
-import Scatter from "../src/components/Scatter";
-import { colorScale } from "../src/components/utils/scales";
+import Hexbin from "../src/components/Hexbin";
+import { extent } from "d3-array";
 import Tooltip from "../src/components/Tooltip";
 import BaseballChartsContainer from "../src/components/BaseballChartsContainer";
+import { colorScale } from "../src/components/utils/scales";
 
 afterEach(cleanup);
 
@@ -39,55 +40,49 @@ describe("StrikeZone Scatter", () => {
     { x: 0.0162, y: 3.9406, value: Math.random(), pitch: "FB" },
   ];
 
-  test("should display zone", () => {
-    const { getByTestId } = render(
+  test("should have multiple hexbins", () => {
+    const rangeValue = extent(data, (d) => d.value);
+
+    const { getAllByTestId } = render(
       <StrikeZone w={w} h={h} margin={margin} data={data}>
+        <Hexbin
+          r={10}
+          x="x"
+          y="y"
+          aggregator="mean"
+          aggregateValue="value"
+          fill={{
+            type: "seqential",
+            minMax: [rangeValue[0], rangeValue[1]],
+            colorRange: ["white", "#003da5"],
+          }}
+          styles={{ stroke: "blue" }}
+        />
         <StrikeZoneBox />
       </StrikeZone>
     );
 
-    expect(getByTestId("strike-zone"));
-    expect(getByTestId("zone"));
-  });
-
-  test("should have 16 circles", () => {
-    const { getAllByTestId, getByTestId } = render(
-      <StrikeZone w={w} h={h} margin={margin} data={data}>
-        <Scatter x="x" y="y" styles={{ fill: "black" }} />
-        <StrikeZoneBox />
-      </StrikeZone>
-    );
-
-    expect(getAllByTestId("scatter-circles")).toHaveLength(16);
-    expect(getByTestId("zone"));
-  });
-
-  test("ordianl colorScale", () => {
-    const domain = ["FB", "SL", "CU"];
-    const colorRange = ["red", "blue", "green"];
-
-    const scale = colorScale("ordinal", domain, colorRange);
-
-    expect(scale("FB")).toBe("red");
-    expect(scale("SL")).toBe("blue");
-    expect(scale("CU")).toBe("green");
+    expect(getAllByTestId("hexbin-path"));
   });
 
   test("shows the tooltip on mouseOver", () => {
+    const rangeValue = extent(data, (d) => d.value);
+
     const { container, getAllByTestId } = render(
       <BaseballChartsContainer>
         <StrikeZone w={w} h={h} margin={margin} data={data}>
-          <Scatter
-            r={6}
+          <Hexbin
+            r={10}
             x="x"
             y="y"
+            aggregator="mean"
+            aggregateValue="value"
             fill={{
-              type: "ordinal",
-              domain: ["FB", "SL", "CU"],
-              fillValue: "pitch",
-              colorRange: ["red", "blue", "green"],
+              type: "seqential",
+              minMax: [rangeValue[0], rangeValue[1]],
+              colorRange: ["white", "#003da5"],
             }}
-            styles={{ stroke: "none" }}
+            styles={{ stroke: "blue" }}
           />
           <StrikeZoneBox />
         </StrikeZone>
@@ -95,7 +90,7 @@ describe("StrikeZone Scatter", () => {
       </BaseballChartsContainer>
     );
 
-    const nodes = getAllByTestId("scatter-circles");
+    const nodes = getAllByTestId("hexbin-path");
 
     fireEvent.mouseOver(nodes[0]);
 
@@ -103,20 +98,23 @@ describe("StrikeZone Scatter", () => {
   });
 
   test("removes the tooltip on mouseOver", () => {
+    const rangeValue = extent(data, (d) => d.value);
+
     const { container, getAllByTestId } = render(
       <BaseballChartsContainer>
         <StrikeZone w={w} h={h} margin={margin} data={data}>
-          <Scatter
-            r={6}
+          <Hexbin
+            r={10}
             x="x"
             y="y"
+            aggregator="mean"
+            aggregateValue="value"
             fill={{
-              type: "ordinal",
-              domain: ["FB", "SL", "CU"],
-              fillValue: "pitch",
-              colorRange: ["red", "blue", "green"],
+              type: "seqential",
+              minMax: [rangeValue[0], rangeValue[1]],
+              colorRange: ["white", "#003da5"],
             }}
-            styles={{ stroke: "none" }}
+            styles={{ stroke: "blue" }}
           />
           <StrikeZoneBox />
         </StrikeZone>
@@ -124,10 +122,34 @@ describe("StrikeZone Scatter", () => {
       </BaseballChartsContainer>
     );
 
-    const nodes = getAllByTestId("scatter-circles");
+    const nodes = getAllByTestId("hexbin-path");
 
     fireEvent.mouseOut(nodes[0]);
 
     expect(container.querySelector("p")).toBeNull();
+  });
+
+  test("linear colorScale", () => {
+    const rangeValue = extent(data, (d) => d.value);
+
+    const minMax = [rangeValue[0], rangeValue[1]];
+    const colorRange = ["rgb(255, 255, 255)", "rgb(0, 61, 165)"];
+
+    const scale = colorScale("linear", minMax, colorRange);
+
+    expect(scale(rangeValue[0])).toBe("rgb(255, 255, 255)");
+    expect(scale(rangeValue[1])).toBe("rgb(0, 61, 165)");
+  });
+
+  test("seqential colorScale", () => {
+    const rangeValue = extent(data, (d) => d.value);
+
+    const minMax = [rangeValue[0], rangeValue[1]];
+    const colorRange = ["rgb(255, 255, 255)", "rgb(0, 61, 165)"];
+
+    const scale = colorScale("seqential", minMax, colorRange);
+
+    expect(scale(rangeValue[0])).toBe("rgb(255, 255, 255)");
+    expect(scale(rangeValue[1])).toBe("rgb(0, 61, 165)");
   });
 });

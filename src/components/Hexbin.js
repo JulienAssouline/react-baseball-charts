@@ -67,6 +67,7 @@ function Hexbin({
   return bins.map((d, i) => (
     <g key={i} style={{ stroke: "#000", strokeOpacity: 0.1 }}>
       <Path
+        data-testid="hexbin-path"
         d={hexbinData.hexagon()}
         transform={`translate(${d.x},${d.y})`}
         style={{

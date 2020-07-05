@@ -1,7 +1,7 @@
 import React, { useContext, useState, useLayoutEffect, useRef } from "react";
 import { TooltipContext } from "../context/TooltipContext";
 
-function Tooltip({ labels, styles, offset = [70, null], children }) {
+function Tooltip({ labels, styles, offset = [70, -10], children }) {
   const { tooltip } = useContext(TooltipContext);
   const [rectWidth, setRectWidth] = useState(null);
 
@@ -14,6 +14,9 @@ function Tooltip({ labels, styles, offset = [70, null], children }) {
   if (!tooltip.display) return <></>;
 
   const { x, y, data } = tooltip;
+
+  const left = x ? x + offset[0] : 0 + offset[0];
+  const top = y ? y + offset[1] : 0 + offset[1];
 
   return (
     <div
@@ -30,8 +33,8 @@ function Tooltip({ labels, styles, offset = [70, null], children }) {
         width: "auto",
         textAlign: "left",
         backgroundColor: "white",
-        left: x + offset[0],
-        top: offset[1] ? y + offset[1] : y - 10,
+        left: left,
+        top: top,
         ...styles,
       }}
     >
