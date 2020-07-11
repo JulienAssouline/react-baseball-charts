@@ -27,6 +27,7 @@ function TextLegend({ position, orient, text, colors, styles, width }) {
 
   return (
     <div
+      data-testid="legend-text"
       style={{
         display: "flex",
         flexFlow: flow,
@@ -85,6 +86,7 @@ function CircleLegend({
 
   return (
     <div
+      data-testid="legend-circle"
       style={{
         display: "flex",
         flexFlow: flow,
@@ -153,7 +155,11 @@ function LinearLegend({
 
   return (
     <>
-      <g style={{ ...styles }} transform={`translate(${x}, ${y})`}>
+      <g
+        data-testid="legend-linear"
+        style={{ ...styles }}
+        transform={`translate(${x}, ${y})`}
+      >
         {linear.ticks().map((d, i) => (
           <g key={i}>
             <rect
