@@ -1,12 +1,7 @@
 import React from "react";
+import { strikeZoneCoords } from "./utils/zone";
 
 export default function StrikeZoneBox({ xScale, yScale }) {
-  const strikeZoneCoords = {
-    top: 3.5,
-    left: -0.783,
-    bottom: 1.5,
-    right: 0.783,
-  };
   return (
     <path
       data-testid="zone"

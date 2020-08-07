@@ -11,6 +11,7 @@ import {
   CircleLegend,
   LinearLegend,
 } from "../src/components/Legends";
+import ZoneChart from "../src/components/ZoneChart";
 
 export default {
   title: "StikeZone",
@@ -174,6 +175,23 @@ export const Hex = () => (
         colorRange: ["white", "#003da5"],
       }}
       styles={{ stroke: "blue" }}
+    />
+    <StrikeZoneBox />
+  </StrikeZone>
+);
+
+export const Zones = () => (
+  <StrikeZone w={w} h={h} margin={margin} data={data}>
+    <ZoneChart
+      x="x"
+      y="y"
+      aggregator="mean"
+      aggregateValue="value"
+      fill={{
+        type: "linear",
+        colorRange: ["#0B57CA", "#E71718"],
+      }}
+      styles={{ stroke: "#F5F5F5" }}
     />
     <StrikeZoneBox />
   </StrikeZone>
