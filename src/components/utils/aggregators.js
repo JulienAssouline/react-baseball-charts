@@ -23,4 +23,8 @@ function binData(hexbinData, data, aggregateValue, aggregatorFun, aggregator) {
   return bins;
 }
 
-export { binData, aggregatorFun };
+function isCount(aggregateValue, d) {
+  return aggregateValue === "count" ? d.value.count : d.value[aggregateValue];
+}
+
+export { binData, aggregatorFun, isCount };

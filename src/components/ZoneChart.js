@@ -3,7 +3,7 @@ import { strikeZoneCoords, pointInRectCheck, createZones } from "./utils/zone";
 import { nest } from "d3-collection";
 import { median, extent } from "d3-array";
 import { colorScale } from "./utils/scales";
-import { aggregatorFun } from "./utils/aggregators";
+import { aggregatorFun, isCount } from "./utils/aggregators";
 
 function ZoneChart({
   x,
@@ -14,7 +14,7 @@ function ZoneChart({
   yScale,
   fill = {},
   aggregator,
-  aggregateValue,
+  aggregateValue = "count",
   labels = {},
 }) {
   const { type, colorRange } = fill;
@@ -68,8 +68,8 @@ function ZoneChart({
     .key((d) => d.zone.zone)
     .rollup((v) => {
       return {
-        count: v.length,
         [aggregateValue]: aggregatorFun(aggregator, v, aggregateValue),
+        count: v.length,
         x_location: median(v, (d) => d.zone.x),
         y_location: median(v, (d) => d.zone.y),
       };
@@ -80,7 +80,7 @@ function ZoneChart({
 
   const color = colorScale(
     type,
-    extent(zoneGroupsTruthy, (d) => d.value[aggregateValue]),
+    extent(zoneGroupsTruthy, (d) => isCount(aggregateValue, d)),
     colorRange
   );
 
@@ -96,7 +96,7 @@ function ZoneChart({
           dominantBaseline="central"
           style={{ ...labels.styles }}
         >
-          {Math.round(d.value.count)}
+          {Math.round(isCount(aggregateValue, d))}
         </text>
       ))
     : null;
@@ -111,7 +111,7 @@ function ZoneChart({
           width={scaledStrikeZoneCoords.zoneWidth}
           height={scaledStrikeZoneCoords.zoneHeight}
           style={{
-            fill: color ? color(d.value[aggregateValue]) : null,
+            fill: color ? color(isCount(aggregateValue, d)) : null,
             ...styles,
           }}
         />

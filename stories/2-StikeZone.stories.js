@@ -185,8 +185,7 @@ export const Zones = () => (
     <ZoneChart
       x="x"
       y="y"
-      aggregator="mean"
-      aggregateValue="value"
+      aggregateValue="count"
       fill={{
         type: "linear",
         colorRange: ["#0B57CA", "#E71718"],
