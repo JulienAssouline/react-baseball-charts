@@ -1,7 +1,7 @@
 import React from "react";
 import { strikeZoneCoords } from "./utils/zone";
 
-export default function StrikeZoneBox({ xScale, yScale }) {
+export default function StrikeZoneBox({ xScale, yScale, styles }) {
   return (
     <path
       data-testid="zone"
@@ -14,7 +14,7 @@ export default function StrikeZoneBox({ xScale, yScale }) {
       )} L ${xScale(strikeZoneCoords.left)}, ${yScale(
         strikeZoneCoords.bottom
       )} L ${xScale(strikeZoneCoords.left)}, ${yScale(strikeZoneCoords.top)}`}
-      style={{ fill: "none", stroke: "black" }}
+      style={{ fill: "none", stroke: "black", ...styles }}
     />
   );
 }

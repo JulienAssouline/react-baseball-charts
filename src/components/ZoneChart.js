@@ -15,6 +15,7 @@ function ZoneChart({
   fill = {},
   aggregator,
   aggregateValue,
+  labels = {},
 }) {
   const { type, colorRange } = fill;
 
@@ -83,6 +84,23 @@ function ZoneChart({
     colorRange
   );
 
+  const text = labels.display
+    ? zoneGroupsTruthy.map((d, i) => (
+        <text
+          key={i}
+          x={xScale(d.value.x_location)}
+          y={yScale(d.value.y_location)}
+          dx={scaledStrikeZoneCoords.zoneWidth / 2}
+          dy={scaledStrikeZoneCoords.zoneHeight / 2}
+          textAnchor="middle"
+          dominantBaseline="central"
+          style={{ ...labels.styles }}
+        >
+          {Math.round(d.value.count)}
+        </text>
+      ))
+    : null;
+
   return (
     <>
       {zoneGroupsTruthy.map((d, i) => (
@@ -98,6 +116,7 @@ function ZoneChart({
           }}
         />
       ))}
+      {text}
     </>
   );
 }

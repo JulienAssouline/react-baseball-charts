@@ -192,8 +192,12 @@ export const Zones = () => (
         colorRange: ["#0B57CA", "#E71718"],
       }}
       styles={{ stroke: "#F5F5F5" }}
+      labels={{
+        display: true,
+        styles: { fill: "white", strike: "none", fontSize: 12 },
+      }}
     />
-    <StrikeZoneBox />
+    <StrikeZoneBox styles={{ strokeWidth: 2 }} />
   </StrikeZone>
 );
 
