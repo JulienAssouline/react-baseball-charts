@@ -3,7 +3,12 @@ import { strikeZoneCoords, pointInRectCheck, createZones } from "./utils/zone";
 import { nest } from "d3-collection";
 import { median, extent } from "d3-array";
 import { colorScale } from "./utils/scales";
-import { aggregatorFun, isCount } from "./utils/aggregators";
+import { aggregatorFun } from "./utils/aggregators";
+import PropTypes from "prop-types";
+
+function isCount(aggregateValue, d) {
+  return aggregateValue === "count" ? d.value.count : d.value[aggregateValue];
+}
 
 function ZoneChart({
   x,
@@ -17,7 +22,7 @@ function ZoneChart({
   aggregateValue = "count",
   labels = {},
 }) {
-  const { type, colorRange } = fill;
+  const { type, minMax, colorRange } = fill;
 
   const scaledStrikeZoneCoords = {
     ...strikeZoneCoords,
@@ -80,7 +85,9 @@ function ZoneChart({
 
   const color = colorScale(
     type,
-    extent(zoneGroupsTruthy, (d) => isCount(aggregateValue, d)),
+    !minMax
+      ? extent(zoneGroupsTruthy, (d) => isCount(aggregateValue, d))
+      : minMax,
     colorRange
   );
 
@@ -101,24 +108,38 @@ function ZoneChart({
       ))
     : null;
 
+  const zoneRects = zoneGroupsTruthy.map((d, i) => (
+    <rect
+      key={i}
+      x={xScale(d.value.x_location)}
+      y={yScale(d.value.y_location)}
+      width={scaledStrikeZoneCoords.zoneWidth}
+      height={scaledStrikeZoneCoords.zoneHeight}
+      style={{
+        fill: color ? color(isCount(aggregateValue, d)) : null,
+        ...styles,
+      }}
+    />
+  ));
+
   return (
     <>
-      {zoneGroupsTruthy.map((d, i) => (
-        <rect
-          key={i}
-          x={xScale(d.value.x_location)}
-          y={yScale(d.value.y_location)}
-          width={scaledStrikeZoneCoords.zoneWidth}
-          height={scaledStrikeZoneCoords.zoneHeight}
-          style={{
-            fill: color ? color(isCount(aggregateValue, d)) : null,
-            ...styles,
-          }}
-        />
-      ))}
+      {zoneRects}
       {text}
     </>
   );
 }
+
+ZoneChart.propTypes = {
+  x: PropTypes.string.isRequired,
+  y: PropTypes.string.isRequired,
+  data: PropTypes.arrayOf(PropTypes.object),
+  xScale: PropTypes.func,
+  yScale: PropTypes.func,
+  aggregator: PropTypes.string,
+  aggregateValue: PropTypes.string,
+  labels: PropTypes.object,
+  fill: PropTypes.object,
+};
 
 export default ZoneChart;

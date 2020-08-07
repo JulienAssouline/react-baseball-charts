@@ -171,7 +171,6 @@ export const Hex = () => (
       aggregateValue="value"
       fill={{
         type: "seqential",
-        minMax: [rangeValue[0], rangeValue[1]],
         colorRange: ["white", "#003da5"],
       }}
       styles={{ stroke: "blue" }}
@@ -195,6 +194,20 @@ export const Zones = () => (
         display: true,
         styles: { fill: "white", strike: "none", fontSize: 12 },
       }}
+    />
+    <LinearLegend
+      scale={{
+        type: "linear",
+        minMax: [1, 15],
+        colorRange: ["#0B57CA", "#E71718"],
+      }}
+      x={30}
+      y={-40}
+      fontSize={14}
+      shapeWidth={40}
+      padding={-120}
+      orient="horizontal"
+      ticks={7}
     />
     <StrikeZoneBox styles={{ strokeWidth: 2 }} />
   </StrikeZone>

@@ -135,6 +135,7 @@ function LinearLegend({
   padding = 40,
   shapeHeight = 20,
   orient = "horizontal",
+  ticks,
 }) {
   const { type, minMax, colorRange } = scale;
 
@@ -160,7 +161,7 @@ function LinearLegend({
         style={{ ...styles }}
         transform={`translate(${x}, ${y})`}
       >
-        {linear.ticks().map((d, i) => (
+        {linear.ticks(ticks).map((d, i) => (
           <g key={i}>
             <rect
               x={orient === "horizontal" ? linear(d) : shapeWidth}

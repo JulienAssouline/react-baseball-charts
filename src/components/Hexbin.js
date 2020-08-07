@@ -1,13 +1,18 @@
 import React, { useContext } from "react";
 import { hexbin } from "d3-hexbin";
+import { extent } from "d3-array";
 import PropTypes from "prop-types";
 
 import { TooltipContext } from "../context/TooltipContext";
 import Path from "./primitives/Path";
 
-import { binData, aggregatorFun } from "./utils/aggregators";
+import { aggregatorFun } from "./utils/aggregators";
 import { colorScale } from "./utils/scales";
 import { handleMouseOut, handleMouseOver } from "./utils/mouseEvents";
+
+function isCount(aggregateValue, d) {
+  return aggregateValue === "count" ? d.count : d[aggregateValue];
+}
 
 function Hexbin({
   r,
@@ -37,15 +42,22 @@ function Hexbin({
       [width - margin.right, height - margin.bottom],
     ]);
 
-  const bins = binData(
-    hexbinData,
-    data,
-    aggregateValue,
-    aggregatorFun,
-    aggregator
+  const bins = Object.assign(
+    hexbinData(data).map((d) => {
+      return {
+        x: d.x,
+        y: d.y,
+        [aggregateValue]: aggregatorFun(aggregator, d, aggregateValue),
+        count: d.length,
+      };
+    })
   );
 
-  const color = colorScale(type, minMax, colorRange);
+  const color = colorScale(
+    type,
+    !minMax ? extent(bins, (d) => isCount(aggregateValue, d)) : minMax,
+    colorRange
+  );
 
   return bins.map((d, i) => (
     <g key={i} style={{ stroke: "#000", strokeOpacity: 0.1 }}>
@@ -54,7 +66,7 @@ function Hexbin({
         d={hexbinData.hexagon()}
         transform={`translate(${d.x},${d.y})`}
         style={{
-          fill: color ? color(d[aggregateValue]) : null,
+          fill: color ? color(isCount(aggregateValue, d)) : null,
           ...styles,
         }}
         onMouseOver={(e) => handleMouseOver(e, d, d.x, d.y, setTooltip)}
